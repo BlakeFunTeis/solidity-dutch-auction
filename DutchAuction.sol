@@ -28,7 +28,7 @@ contract DutchAction is Ownable, ERC721A {
     string private baseURI;
 
     // Define the start time
-    uint private startTimestamp = 1676268000;
+    uint private startTimestamp = 1676372400;
 
     // Define the end time
     uint private endTimestamp = 1676390400;
@@ -73,15 +73,10 @@ contract DutchAction is Ownable, ERC721A {
     * @return uint current mint price
     */
     function getCurrentMintPrice() public view returns(uint) {
-        // Initialize the newPrice with defaultPrice
         uint newPrice = defaultPricePerToken;
-        // Get the current block time
         uint blockTime = block.timestamp;
-        // Calculate the time difference between start and end time
         uint timeDifference = blockTime.sub(startTimestamp);
-        // Calculate the number of elapsed periods
         uint elapsedPeriods = timeDifference.div(decayInterval);
-        // Calculate the target price
         uint targetPrice = elapsedPeriods.mul(priceDecayRate);
         int256 diff = int256(defaultPricePerToken) - int256(targetPrice);
         int256 minPrice = int256(minimumPricePerToken);
