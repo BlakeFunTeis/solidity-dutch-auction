@@ -54,6 +54,21 @@ contract DutchAction is Ownable, ERC721A {
     constructor(string memory _name, string memory _symbol) ERC721A(_name, _symbol) {}
 
     /**
+    * @dev function to Dutch Action Mint NFTs
+    * @param _total total number of NFTs to Dutch Action Mint
+    */
+    function DutchActionMint(uint _total) public payable isNormalUser isCheckMint(_total) {
+        uint currentMintPrice = getCurrentMintPrice();
+        require((msg.value.mul(_total)) >= currentMintPrice, "Did not send enough ether");
+        allMintData[msg.sender].mintPrice += currentMintPrice.mul(_total);
+        allMintData[msg.sender].total += _total;
+        for(uint i = 0; i < _total; i++) {
+            uint mintIndex = totalSupply();
+            _safeMint(msg.sender, mintIndex);
+        }
+    }
+
+    /**
     * @dev function to get the current mint price of NFTs
     * @return uint current mint price
     */
