@@ -54,6 +54,31 @@ contract DutchAction is Ownable, ERC721A {
     constructor(string memory _name, string memory _symbol) ERC721A(_name, _symbol) {}
 
     /**
+    * @dev function to get the current mint price of NFTs
+    * @return uint current mint price
+    */
+    function getCurrentMintPrice() public view returns(uint) {
+        // Initialize the newPrice with defaultPrice
+        uint newPrice = defaultPricePerToken;
+        // Get the current block time
+        uint blockTime = block.timestamp;
+        // Calculate the time difference between start and end time
+        uint timeDifference = blockTime.sub(startTimestamp);
+        // Calculate the number of elapsed periods
+        uint elapsedPeriods = timeDifference.div(decayInterval);
+        // Calculate the target price
+        uint targetPrice = elapsedPeriods.mul(priceDecayRate);
+
+        if (targetPrice <= minimumPricePerToken) {
+            newPrice = minimumPricePerToken;
+        } else {
+            newPrice = defaultPricePerToken.sub(elapsedPeriods.mul(minimumPricePerToken));
+        }
+
+        return newPrice;
+    }
+
+    /**
     * @dev function to set the base URI for NFTs
     * @param _uri base URI string
     */
