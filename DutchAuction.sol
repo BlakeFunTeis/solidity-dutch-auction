@@ -64,7 +64,7 @@ contract DutchAction is Ownable, ERC721A {
         allMintData[msg.sender].total += _total;
         for(uint i = 0; i < _total; i++) {
             uint mintIndex = totalSupply();
-            _safeMint(msg.sender, mintIndex);
+            _safeMint(msg.sender, mintIndex + 1);
         }
     }
 
@@ -83,11 +83,12 @@ contract DutchAction is Ownable, ERC721A {
         uint elapsedPeriods = timeDifference.div(decayInterval);
         // Calculate the target price
         uint targetPrice = elapsedPeriods.mul(priceDecayRate);
-
-        if (targetPrice <= minimumPricePerToken) {
+        int256 diff = int256(defaultPricePerToken) - int256(targetPrice);
+        int256 minPrice = int256(minimumPricePerToken);
+        if (diff <= minPrice) {
             newPrice = minimumPricePerToken;
         } else {
-            newPrice = defaultPricePerToken.sub(elapsedPeriods.mul(minimumPricePerToken));
+            newPrice = defaultPricePerToken.sub(targetPrice);
         }
 
         return newPrice;
