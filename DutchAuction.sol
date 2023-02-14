@@ -6,6 +6,6 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 import "https://github.com/chiru-labs/ERC721A/blob/main/contracts/ERC721A.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Strings.sol";
 
-contract DutchAction {
+contract DutchAction is Ownable, ERC721A {
 
 }
